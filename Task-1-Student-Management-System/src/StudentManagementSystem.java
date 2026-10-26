@@ -14,8 +14,8 @@ public class StudentManagementSystem {
             System.out.println("2. View All Students");
             System.out.println("3. Search Student by ID");
             System.out.println("4. Exit");
-            System.out.print("Enter your choice: ");
-            choice=sc.nextInt();
+    
+            choice=readInt("Enter your choice: ");
 
             switch(choice){
                 case 1:
@@ -38,16 +38,27 @@ public class StudentManagementSystem {
     }
 
     public static void addStudent(){
-        System.out.print("Enter student ID: ");
-        int id=sc.nextInt();
-        sc.nextLine();
 
-        System.out.print("Enter student name: ");
-        String name=sc.nextLine();
+        int id=readInt("Enter student ID: ");
 
-        System.out.print("Enter student marks: ");
-        double marks=sc.nextDouble();
+        for(Student student:students){
+            if(student.getId()==id){
+                System.out.println("A student with this ID already exists!");
+                return;
+            }
+        }
 
+        String name;
+
+        do{
+            System.out.print("Enter student name: ");
+            name=sc.nextLine();
+            if(name.isEmpty()){
+                System.out.println("Name cannot be empty!");
+            }
+        }while(name.isEmpty());
+
+        double marks=readDouble("Enter student marks: ");
         Student student=new Student(id,name,marks);
         students.add(student);
 
@@ -71,8 +82,7 @@ public class StudentManagementSystem {
 
     public static void searchStudent(){
 
-        System.out.print("Enter Student ID to search: ");
-        int searchId=sc.nextInt();
+        int searchId=readInt("Enter student ID to search: ");
 
         for(Student student:students){
 
@@ -85,5 +95,33 @@ public class StudentManagementSystem {
             }
         }
         System.out.println("Student not found.");
+    }
+
+    public static int readInt(String message){
+
+        while(true){
+            System.out.print(message);
+            String input=sc.nextLine().trim();
+
+            try{
+                return Integer.parseInt(input);
+            }catch(NumberFormatException e){
+                System.out.println("Invalid input! Please enter a valid integer.");
+            }
+        }
+    }
+
+    public static double readDouble(String message){
+
+        while(true){
+            System.out.print(message);
+            String input=sc.nextLine().trim();
+
+            try{
+                return Double.parseDouble(input);
+            }catch(NumberFormatException e){
+                System.out.println("Invalid input! Please enter a valid number.");
+            }
+        }
     }
 }
